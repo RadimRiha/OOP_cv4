@@ -9,72 +9,53 @@ namespace OOP_cv4
     class StringStatistics
     {
         private string data = "";
-        private static char[] sentenceEndings = { '.', '?', '!' };
+        
         private static char[] wordSeparators = { ' ', '\n' };
-        //private static string[] abbreviations = { "zkr." };
+        private static char[] punctuation = { '.', ',', ':', ';', '?', '!', '(', ')' };
+        private static char[] sentenceEndings = { '.', '?', '!' };
 
-        public StringStatistics(string initString)
+        public StringStatistics(string dataIn)
         {
-            data = initString;
+            data = dataIn;
         }
-        public int WordCount()
+        private static string removeDuplicate(string dataIn, char[] letters)
         {
-            /*
-            if (data.Length == 0) return 0;
-            int result = 1;
-            char prevLetter = data[0];
-            foreach (char letter in data)
+            string result = "";
+            char prevLetter = dataIn[0];
+            foreach (char letter in dataIn)
             {
-                if (wordSeparators.Contains(letter) && !wordSeparators.Contains(prevLetter))    //don't increment on duplicate separators
+                if (!(letters.Contains(letter) && letters.Contains(prevLetter)))
                 {
-                    result++;
+                    result += letter;
                 }
                 prevLetter = letter;
             }
             return result;
-            */
+        }
+        private static string removeAny(string dataIn, char[] letters)
+        {
+            string result = dataIn;
+            foreach (char letter in letters)
+            {
+                result = result.Replace(letter.ToString(), String.Empty);
+            }
+            return result;
+        }
+        public int WordCount()
+        {
             return data.Split(wordSeparators).Length;
         }
         public int LineCount()
         {
-            /*
-            if (data.Length == 0) return 0;
-            int result = 1;
-            foreach (char letter in data)
-            {
-                if (letter == '\n')
-                {
-                    result++;
-                }
-            }
-            return result;
-            */
             return data.Split('\n').Length;
         }
         public int SentenceCount()
         {
-            /*
-            if (data.Length == 0) return 0;
-            int result = 0;
-            char prevLetter = data[0];
-            int lastSpaceIndex = 0;
-            for (int letterIndex = 0; letterIndex < data.Length; letterIndex++)
-            {
-                if (data[letterIndex] == ' ') lastSpaceIndex = letterIndex;
-                if (sentenceSeparators.Contains(data[letterIndex]) && !sentenceSeparators.Contains(prevLetter)      //don't increment on duplicate separators
-                    && !abbreviations.Contains(data.Substring(lastSpaceIndex + 1, letterIndex - lastSpaceIndex)))   //don't increment on abbreviations
-                {
-                    result++;
-                }
-                prevLetter = data[letterIndex];
-            }
-            return result;
-            */
-            string[] dataSplit = data.Split(wordSeparators);
+            string[] stringSplit = removeDuplicate(data, wordSeparators).Split(wordSeparators);
             int result = 1;
-            for (int wordIndex = 0; wordIndex < dataSplit.Length-1; wordIndex++)
+            for (int wordIndex = 0; wordIndex < stringSplit.Length-1; wordIndex++)
             {
-                if (sentenceEndings.Contains(dataSplit[wordIndex][dataSplit[wordIndex].Length - 1]) && Char.IsUpper(dataSplit[wordIndex + 1][0]))
+                if (sentenceEndings.Contains(stringSplit[wordIndex][stringSplit[wordIndex].Length - 1]) && Char.IsUpper(stringSplit[wordIndex + 1][0]))
                 {
                     result++;
                 }
@@ -83,10 +64,10 @@ namespace OOP_cv4
         }
         public string[] LongestWords()
         {
-            string[] dataSplit = data.Split(wordSeparators);
+            string[] stringSplit = removeAny(removeDuplicate(data, wordSeparators), punctuation).Split(wordSeparators);
             int maxLength = 0;
             int resultSize = 1;
-            foreach (string word in dataSplit)
+            foreach (string word in stringSplit)
             {
                 if (word.Length > maxLength)
                 {
@@ -97,7 +78,7 @@ namespace OOP_cv4
             }
             string[] result = new string[resultSize];
             int resultIndex = 0;
-            foreach (string word in dataSplit)
+            foreach (string word in stringSplit)
             {
                 if (word.Length == maxLength)
                 {
@@ -109,10 +90,10 @@ namespace OOP_cv4
         }
         public string[] ShortestWords()
         {
-            string[] dataSplit = data.Split(wordSeparators);
-            int minLength = dataSplit[0].Length;
+            string[] stringSplit = removeAny(removeDuplicate(data, wordSeparators), punctuation).Split(wordSeparators);
+            int minLength = stringSplit[0].Length;
             int resultSize = 1;
-            foreach (string word in dataSplit)
+            foreach (string word in stringSplit)
             {
                 if (word.Length < minLength)
                 {
@@ -123,11 +104,53 @@ namespace OOP_cv4
             }
             string[] result = new string[resultSize];
             int resultIndex = 0;
-            foreach (string word in dataSplit)
+            foreach (string word in stringSplit)
             {
                 if (word.Length == minLength)
                 {
                     result[resultIndex] = word;
+                    resultIndex++;
+                }
+            }
+            return result;
+        }
+        public string[] MostCommonWords()
+        {
+            string[] stringSplit = removeAny(removeDuplicate(data, wordSeparators), punctuation).Split(wordSeparators);
+            string uniqueWords = " ";
+            int uniqueWordsCount = 0;
+            foreach (string word in stringSplit)
+            {
+                if (!uniqueWords.Contains(" " + word + " "))
+                {
+                    uniqueWordsCount++;
+                    uniqueWords += word + " ";
+                }
+            }
+            int[] wordCounts = new int[uniqueWordsCount];
+            string[] words = uniqueWords.Substring(1,uniqueWords.Length-2).Split(' ');
+            foreach (string word in stringSplit)
+            {
+                wordCounts[Array.IndexOf(words, word)]++;
+            }
+            int maxCount = 0;
+            int resultSize = 1;
+            for (int wordIndex = 0; wordIndex < wordCounts.Length; wordIndex++)
+            {
+                if (wordCounts[wordIndex] > maxCount)
+                {
+                    maxCount = wordCounts[wordIndex];
+                    resultSize = 1;
+                }
+                else if (wordCounts[wordIndex] == maxCount) resultSize++;
+            }
+            string[] result = new string[resultSize];
+            int resultIndex = 0;
+            for (int countsIndex = 0; countsIndex < wordCounts.Length; countsIndex++)
+            {
+                if (wordCounts[countsIndex] == maxCount)
+                {
+                    result[resultIndex] = words[countsIndex];
                     resultIndex++;
                 }
             }

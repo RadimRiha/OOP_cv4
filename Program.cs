@@ -23,6 +23,7 @@ namespace OOP_cv4
             Console.WriteLine("Number of sentences: {0}\n", Statistics.SentenceCount());
             Console.WriteLine("Longest words: {0}\n", string.Join(", ", Statistics.LongestWords()));
             Console.WriteLine("Shortest words: {0}\n", string.Join(", ", Statistics.ShortestWords()));
+            Console.WriteLine("Most common words: {0}\n", string.Join(", ", Statistics.MostCommonWords()));
         }
     }
 }
