@@ -10,7 +10,7 @@ namespace OOP_cv4
     {
         static void Main(string[] args)
         {
-            string TestText = "Toto je retezec predstavovany nekolika radky,\n"
+            string TestText = "Toto je retezec , predstavovany nekolika radky,\n"
                                  + "ktere jsou od sebe oddeleny znakem LF (Line Feed).\n"
                                  + "Je tu i nejaky ten vykricnik! Pro ucely testovani i otaznik?\n"
                                  + "Toto je jen zkratka zkr. ale ne konec vety. A toto je\n"
@@ -24,6 +24,8 @@ namespace OOP_cv4
             Console.WriteLine("Longest words: {0}\n", string.Join(", ", Statistics.LongestWords()));
             Console.WriteLine("Shortest words: {0}\n", string.Join(", ", Statistics.ShortestWords()));
             Console.WriteLine("Most common words: {0}\n", string.Join(", ", Statistics.MostCommonWords()));
+            Console.WriteLine("Words in alphabetical order: {0}\n", string.Join(", ", Statistics.AlphabeticalOrder()));
+            Console.WriteLine("Is string infected: {0}\n", Statistics.IsInfected());
         }
     }
 }
