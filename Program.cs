@@ -10,7 +10,7 @@ namespace OOP_cv4
     {
         static void Main(string[] args)
         {
-            string TestText = "Toto je retezec , predstavovany nekolika radky,\n"
+            string TestText = "Toto je retezec predstavovany nekolika radky,\n"
                                  + "ktere jsou od sebe oddeleny znakem LF (Line Feed).\n"
                                  + "Je tu i nejaky ten vykricnik! Pro ucely testovani i otaznik?\n"
                                  + "Toto je jen zkratka zkr. ale ne konec vety. A toto je\n"

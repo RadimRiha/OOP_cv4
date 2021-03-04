@@ -48,7 +48,7 @@ namespace OOP_cv4
             for (int wordIndex = 0; wordIndex < stringSplit.Length-1; wordIndex++)
             {
                 //new sentence is detected as a sentence ending character followed by an upper case letter
-                if (sentenceEndings.Contains(stringSplit[wordIndex][stringSplit[wordIndex].Length - 1]) && Char.IsUpper(stringSplit[wordIndex + 1][0]))
+                if (sentenceEndings.Contains(stringSplit[wordIndex].Last()) && Char.IsUpper(stringSplit[wordIndex + 1].First()))
                 {
                     result++;
                 }
